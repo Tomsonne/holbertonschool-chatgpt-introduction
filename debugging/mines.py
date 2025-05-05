@@ -52,8 +52,10 @@ class Minesweeper:
         return True
 
     def all_safe_cells_revealed(self):
+        """Vérifie si toutes les cases sans mine ont été révélées."""
         for y in range(self.height):
             for x in range(self.width):
+                # Vérifie si la cellule est non-mine et non révélée
                 if (y * self.width + x) not in self.mines and not self.revealed[y][x]:
                     return False
         return True
