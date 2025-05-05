@@ -1,10 +1,26 @@
+import os
+
 class Checkbook:
-    def __init__(self):
-        self.balance = 0.0
+    def __init__(self, filename="checkbook.txt"):
+        self.filename = filename
+        self.balance = self.load_balance()
+
+    def load_balance(self):
+        # Charger le solde depuis le fichier, s'il existe
+        if os.path.exists(self.filename):
+            with open(self.filename, "r") as file:
+                return float(file.read().strip())
+        return 0.0
+
+    def save_balance(self):
+        # Sauvegarder le solde dans le fichier
+        with open(self.filename, "w") as file:
+            file.write(str(self.balance))
 
     def deposit(self, amount):
         self.balance += amount
         print("Deposited ${:.2f}".format(amount))
+        self.save_balance()
         print("Current Balance: ${:.2f}".format(self.balance))
 
     def withdraw(self, amount):
@@ -13,13 +29,14 @@ class Checkbook:
         else:
             self.balance -= amount
             print("Withdrew ${:.2f}".format(amount))
+            self.save_balance()
             print("Current Balance: ${:.2f}".format(self.balance))
 
     def get_balance(self):
         print("Current Balance: ${:.2f}".format(self.balance))
 
 def main():
-    cb = Checkbook()
+    cb = Checkbook()  # Charge le solde à partir du fichier
     while True:
         action = input("What would you like to do? (deposit, withdraw, balance, exit): ")
         if action.lower() == 'exit':
